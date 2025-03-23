@@ -76,13 +76,13 @@ export async function getMovie(id) {
   return data;
 }
 
-export async function setFavorit(id) {
+export async function updateFavorit(id, state) {
   const supabase = await createServerSupabaseClient();
-
+  state = state == 1 ? 0 : 1;
   const { data, error } = await supabase
     .from("movie")
     .update({
-      favorit: supabase.raw("CASE WHEN favorit = 1 THEN 0 ELSE 1 END"),
+      favorit: state,
     })
     .eq("id", id);
   handleError(error);

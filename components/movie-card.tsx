@@ -1,15 +1,34 @@
 "use client";
 
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { updateFavorit } from "actions/movieActions";
+import { queryClient } from "config/ReactQueryClientProvider";
 import Link from "next/link";
+import { IconButton } from "node_modules/@material-tailwind/react";
+import { useState } from "react";
 
 export default function MovieCard({ movie }) {
+  const [isFavorit, setIsFavorit] = useState(movie.favorit);
+
+  const handleClick = async () => {
+    setIsFavorit(!isFavorit);
+    await updateFavorit(movie.id, movie.favorit);
+  };
+
   return (
     <div className="col-span-1 relative">
-      <button
-        className={`absolute top-2 right-2 z-20 ${
-          movie.favorit ? "fa-solid fa-heart" : "fa-regular fa-heart"
-        } text-red-500 text-3xl`}
-      />
+      {isFavorit ? (
+        <button
+          onClick={handleClick}
+          className={`absolute top-2 right-2 z-20 fa-solid fa-heart text-red-500 text-3xl`}
+        />
+      ) : (
+        <button
+          onClick={handleClick}
+          className={`absolute top-2 right-2 z-20 fa-regular fa-heart text-red-500 text-3xl`}
+        />
+      )}
+
       {/* image */}
       <div>
         <img src={movie.image_url} className="w-full" />
